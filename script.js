@@ -2,7 +2,7 @@
   "use strict";
 
   // Change this to your Render URL after deploying (e.g. https://your-app.onrender.com/api)
-  const API = "http://localhost:5000/api";
+  const API = "https://employee-management-system-4fti.onrender.com/api";
   const PAGE_SIZE = 10;
 
   /* ================= API + STORE ================= */
