@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeamDesk — Employee Management System</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-mark">TD</div>
+    <div class="brand-text">
+      <span class="brand-name">TeamDesk</span>
+      <span class="brand-sub">Employee Management</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <button class="nav-item active" data-view="dashboard">
+      <svg viewBox="0 0 24 24" class="nav-icon"><path d="M4 13h6V4H4v9zm0 7h6v-5H4v5zm10 0h6V11h-6v9zm0-16v5h6V4h-6z"/></svg>
+      <span>Dashboard</span>
+    </button>
+    <button class="nav-item" data-view="employees">
+      <svg viewBox="0 0 24 24" class="nav-icon"><path d="M16 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm-8 0a3 3 0 1 0-3-3 3 3 0 0 0 3 3zm8 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm-8 .5C5.33 13.5 1 14.84 1 17.5V19h6v-2c0-1.2.55-2.2 1.4-3.04-.1-.01-.27-.46-.4-.46z"/></svg>
+      <span>Employees</span>
+    </button>
+    <button class="nav-item" data-view="departments">
+      <svg viewBox="0 0 24 24" class="nav-icon"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10z"/></svg>
+      <span>Departments</span>
+    </button>
+    <button class="nav-item" data-view="reports">
+      <svg viewBox="0 0 24 24" class="nav-icon"><path d="M5 3h14a1 1 0 0 1 1 1v16l-4-3-3 3-3-3-3 3-3-3-1 .8V4a1 1 0 0 1 1-1zm2 5h10V6H7v2zm0 4h10v-2H7v2zm0 4h6v-2H7v2z"/></svg>
+      <span>Reports</span>
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="footer-note">Employee Management</div>
+    <div class="footer-sub">Node.js · Express · MongoDB</div>
+  </div>
+</aside>
+<div class="sidebar-scrim" id="sidebarScrim"></div>
+
+<!-- MAIN -->
+<div class="main">
+  <header class="topbar">
+    <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Toggle menu">
+      <svg viewBox="0 0 24 24"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+    </button>
+
+    <div class="topbar-search">
+      <svg viewBox="0 0 24 24" class="search-icon"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input type="text" id="globalSearch" placeholder="Search employees by name, ID or email…">
+    </div>
+
+    <div class="topbar-right">
+      <div class="topbar-user">
+        <div class="user-avatar">HR</div>
+        <div class="user-meta">
+          <span class="user-name">Admin</span>
+          <span class="user-role">HR Manager</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- DASHBOARD -->
+    <section class="view active" id="view-dashboard">
+      <div class="view-head">
+        <div>
+          <h1>Dashboard</h1>
+          <p class="view-sub">Overview of your workforce and payroll</p>
+        </div>
+      </div>
+
+      <div class="stat-grid" id="statGrid"></div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><h2>Employees per department</h2></div>
+          <canvas id="chartDept" height="220"></canvas>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>New joiners — last 6 months</h2></div>
+          <canvas id="chartJoiners" height="220"></canvas>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><h2>Department summary</h2></div>
+          <div id="deptSummaryList" class="mini-list"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>Recent joiners</h2></div>
+          <div id="recentJoinersList" class="mini-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EMPLOYEES -->
+    <section class="view" id="view-employees">
+      <div class="view-head">
+        <div>
+          <h1>Employees</h1>
+          <p class="view-sub">Manage employee records</p>
+        </div>
+        <button class="btn btn-primary" id="btnAddEmployee">
+          <svg viewBox="0 0 24 24" class="btn-icon"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>
+          Add Employee
+        </button>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar-search">
+          <svg viewBox="0 0 24 24" class="search-icon"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+          <input type="text" id="empSearch" placeholder="Search by name, ID or email">
+        </div>
+        <select id="empDeptFilter" class="select"></select>
+        <select id="empStatusFilter" class="select">
+          <option value="">All statuses</option>
+          <option value="Active">Active</option>
+          <option value="On Leave">On Leave</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th><th>Name</th><th>Email</th><th>Department</th><th>Designation</th>
+              <th>Salary</th><th>Joined</th><th>Status</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="empTableBody"></tbody>
+        </table>
+        <div class="empty-state" id="empEmpty">
+          <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+          <p>No employees found</p>
+          <span>Try adjusting your search or filters</span>
+        </div>
+      </div>
+
+      <div class="pager">
+        <button class="btn btn-ghost btn-sm" id="btnPrevPage">Previous</button>
+        <span id="pageInfo" class="cell-muted"></span>
+        <button class="btn btn-ghost btn-sm" id="btnNextPage">Next</button>
+      </div>
+    </section>
+
+    <!-- DEPARTMENTS -->
+    <section class="view" id="view-departments">
+      <div class="view-head">
+        <div>
+          <h1>Departments</h1>
+          <p class="view-sub">Organise employees into departments</p>
+        </div>
+        <button class="btn btn-primary" id="btnAddDepartment">
+          <svg viewBox="0 0 24 24" class="btn-icon"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>
+          Add Department
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Name</th><th>Description</th><th>Employees</th><th></th></tr></thead>
+          <tbody id="deptTableBody"></tbody>
+        </table>
+        <div class="empty-state" id="deptEmpty">
+          <svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12z"/></svg>
+          <p>No departments yet</p>
+          <span>Add your first department to get started</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section class="view" id="view-reports">
+      <div class="view-head">
+        <div>
+          <h1>Reports</h1>
+          <p class="view-sub">Generate and export employee reports</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="toolbar">
+          <select id="reportType" class="select">
+            <option value="employee-list">Employee list</option>
+            <option value="by-department">Headcount by department</option>
+            <option value="salary-summary">Salary summary by department</option>
+            <option value="recent-joiners">Recent joiners (90 days)</option>
+          </select>
+          <button class="btn btn-primary" id="btnGenerateReport">Generate Report</button>
+          <button class="btn btn-ghost" id="btnPrintReport">Print</button>
+          <button class="btn btn-ghost" id="btnExportReport">Export CSV</button>
+        </div>
+
+        <div id="reportSummary" class="stat-grid stat-grid-sm"></div>
+
+        <div class="table-wrap">
+          <table class="table">
+            <thead id="reportTableHead"></thead>
+            <tbody id="reportTableBody"></tbody>
+          </table>
+          <div class="empty-state" id="reportEmpty">
+            <svg viewBox="0 0 24 24"><path d="M5 3h14a1 1 0 0 1 1 1v16l-4-3-3 3-3-3-3 3-3-3-1 .8V4a1 1 0 0 1 1-1z"/></svg>
+            <p>No data for this selection</p>
+            <span>Try a different report type</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- MODALS -->
+<div class="modal-backdrop" id="modalBackdrop">
+
+  <div class="modal" id="employeeModal">
+    <div class="modal-head">
+      <h3 id="employeeModalTitle">Add Employee</h3>
+      <button class="icon-btn" data-close-modal>&times;</button>
+    </div>
+    <form id="employeeForm" class="modal-body" novalidate>
+      <input type="hidden" id="empEditId">
+      <div class="form-grid">
+        <div class="field">
+          <label for="fEmpId">Employee ID</label>
+          <input type="text" id="fEmpId" placeholder="e.g. EMP002">
+          <span class="field-error" data-for="fEmpId"></span>
+        </div>
+        <div class="field">
+          <label for="fName">Full name</label>
+          <input type="text" id="fName">
+          <span class="field-error" data-for="fName"></span>
+        </div>
+        <div class="field">
+          <label for="fEmail">Email</label>
+          <input type="email" id="fEmail">
+          <span class="field-error" data-for="fEmail"></span>
+        </div>
+        <div class="field">
+          <label for="fPhone">Phone (optional)</label>
+          <input type="text" id="fPhone">
+          <span class="field-error" data-for="fPhone"></span>
+        </div>
+        <div class="field">
+          <label for="fDesignation">Designation</label>
+          <input type="text" id="fDesignation" placeholder="e.g. Developer">
+          <span class="field-error" data-for="fDesignation"></span>
+        </div>
+        <div class="field">
+          <label for="fDepartment">Department</label>
+          <select id="fDepartment"></select>
+          <span class="field-error" data-for="fDepartment"></span>
+        </div>
+        <div class="field">
+          <label for="fSalary">Salary (₹)</label>
+          <input type="number" id="fSalary" min="0">
+          <span class="field-error" data-for="fSalary"></span>
+        </div>
+        <div class="field">
+          <label for="fJoinDate">Join date</label>
+          <input type="date" id="fJoinDate">
+          <span class="field-error" data-for="fJoinDate"></span>
+        </div>
+        <div class="field">
+          <label for="fStatus">Status</label>
+          <select id="fStatus">
+            <option value="Active">Active</option>
+            <option value="On Leave">On Leave</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save Employee</button>
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal modal-sm" id="departmentModal">
+    <div class="modal-head">
+      <h3 id="departmentModalTitle">Add Department</h3>
+      <button class="icon-btn" data-close-modal>&times;</button>
+    </div>
+    <form id="departmentForm" class="modal-body" novalidate>
+      <input type="hidden" id="deptEditId">
+      <div class="form-grid" style="grid-template-columns:1fr;">
+        <div class="field">
+          <label for="fDeptName">Department name</label>
+          <input type="text" id="fDeptName">
+          <span class="field-error" data-for="fDeptName"></span>
+        </div>
+        <div class="field">
+          <label for="fDeptDesc">Description (optional)</label>
+          <input type="text" id="fDeptDesc">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save Department</button>
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal modal-sm" id="detailsModal">
+    <div class="modal-head">
+      <h3 id="detailsModalTitle">Details</h3>
+      <button class="icon-btn" data-close-modal>&times;</button>
+    </div>
+    <div class="modal-body" id="detailsModalBody"></div>
+  </div>
+
+  <div class="modal modal-sm" id="confirmModal">
+    <div class="modal-head">
+      <h3 id="confirmModalTitle">Are you sure?</h3>
+      <button class="icon-btn" data-close-modal>&times;</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirmModalText" class="confirm-text"></p>
+      <div class="form-actions">
+        <button class="btn btn-danger" id="confirmModalOk">Confirm</button>
+        <button class="btn btn-ghost" data-close-modal>Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast-stack" id="toastStack"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
