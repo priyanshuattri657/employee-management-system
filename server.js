@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const path = require("path");
 require("dotenv").config();
 
 const departmentRoutes = require("./departmentRoutes");
@@ -13,8 +14,10 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+app.use(express.static(__dirname));
+
 app.get("/", (req, res) => {
-  res.json({ message: "Employee Management API is running!" });
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.use("/api/departments", departmentRoutes);
