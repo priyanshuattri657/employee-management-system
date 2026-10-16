@@ -79,28 +79,25 @@ A full-stack web application to manage employee records and departments, built a
 ## Screenshots
 
 ### Dashboard
-![Dashboard](ScreenShots/dashboard.png)
+![Dashboard](Screen%20Shot/dashboard.png)
 
 ### Employees
-![Employees](ScreenShots/employees.png)
+![Employees](Screen%20Shot/Employees%20list.png)
 
 ### Add Employee
-![Add Employee](ScreenShots/add-employee.png)
-
-### Search and Filter
-![Search and Filter](ScreenShots/search-filter.png)
+![Add Employee](Screen%20Shot/Add%20Employee%20Form.png)
 
 ### Departments
-![Departments](ScreenShots/departments.png)
+![Departments](Screen%20Shot/Departments%20page.png)
 
 ### Delete Blocked
-![Delete Blocked](ScreenShots/delete-blocked.png)
+![Delete Blocked](Screen%20Shot/Blocked%20department%20delete.png)
 
 ### Reports
-![Reports](ScreenShots/reports.png)
+![Reports](Screen%20Shot/Reports%20page.png)
 
 ### API Test (Postman)
-![Postman](ScreenShots/postman-get-summary.png)
+![Postman](Screen%20Shot/postman-get-summary.png)
 
 ## Live Demo
 
